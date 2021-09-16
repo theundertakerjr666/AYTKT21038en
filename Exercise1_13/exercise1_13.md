@@ -48,3 +48,7 @@ Step 14/16 : RUN ./server
 [GIN-debug] POST   /messages                 --> server/controller.CreateMessage (4 handlers)
 [GIN-debug] Listening and serving HTTP on :8080
 
+
+generaiotubuntu:~$ wget http://127.0.0.1:8080/ping --auth-no-challenge
+--2021-09-16 13:22:53--  http://127.0.0.1:8080/ping
+Connecting to 127.0.0.1:8080... connected.

@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 
+FROM ubuntu:18.04 as exercise1_13
 
 WORKDIR /mydir
 RUN apt-get update && apt-get install -y wget curl
@@ -10,8 +10,11 @@ WORKDIR /mydir
 RUN go version 
 RUN go build 
 ENV PORT=8080
-ENV REQUEST_ORIGIN=http://localhost
-ENV API_URL="http://localhost:8080"
-RUN ./server 
+ENV REQUEST_ORIGIN="http://127.0.0.1:8080"
+ENV API_URL="http://127.0.0.1:8080"
+RUN ls -ltra /mydir
+RUN go install . 
 EXPOSE 8080
-ENTRYPOINT API_URL=http://localhost:8080
+#ENTRYPOINT API_URL=http://127.0.0.1:8080
+CMD ["/mydir/server"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
