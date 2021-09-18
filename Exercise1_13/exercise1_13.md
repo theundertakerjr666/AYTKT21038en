@@ -52,3 +52,4 @@ Step 14/16 : RUN ./server
 generaiotubuntu:~$ wget http://127.0.0.1:8080/ping --auth-no-challenge
 --2021-09-16 13:22:53--  http://127.0.0.1:8080/ping
 Connecting to 127.0.0.1:8080... connected.
+pong

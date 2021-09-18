@@ -1,0 +1,22 @@
+FROM ubuntu:18.04 as exercise1_14_front
+
+EXPOSE 5000
+WORKDIR /mydir
+RUN apt-get update && apt-get install -y wget
+RUN apt-get install -y curl telnet 
+COPY ./example-frontend .
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+RUN apt-get install -y nodejs 
+WORKDIR /mydir
+RUN node -v && npm -v
+#ENV API_URL="http://127.0.0.1:5000"
+ENV REACT_APP_BACKEND_URL="http://localhost:8080"
+RUN npm install
+RUN npm run build
+RUN npm install -g serve 
+CMD serve -s -l 5000 build
+
+# docker network create internal-container-network
+# docker build -f Dockerfile_front_14 -t exercise1_14_front ./
+# docker run -d --net=internal-container-network --name exercise1_14_front -p 5000:5000 exercise1_14_front
+
