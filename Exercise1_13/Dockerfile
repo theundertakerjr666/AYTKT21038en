@@ -11,7 +11,7 @@ WORKDIR /mydir
 RUN go version 
 RUN go build 
 ENV PORT=8080
-ENV REQUEST_ORIGIN="http://localhost"
+ENV REQUEST_ORIGIN="http://127.0.0.1:5000"
 #ENV API_URL="http://127.0.0.1:8080"
 RUN go test ./...
 RUN ls -ltra /mydir
