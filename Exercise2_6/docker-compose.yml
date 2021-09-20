@@ -1,0 +1,57 @@
+version: '3.8' 
+
+services:
+    exercise2-4-redis:
+      image: redis 
+      container_name: exercise2-4-redis
+      hostname: redhost
+      ports:
+        - 6379:6379 
+      networks:
+        - database-red-network
+
+    exercise2-6-postgres_server:
+       image: postgres:13.2-alpine
+       restart: unless-stopped
+       environment:
+        -  POSTGRES_PASSWORD: postgres
+       container_name: exercise2-6-postgres_server
+       hostname: postgres_server 
+       networks:
+        - database-red-network
+
+    exercise2-4-backend:
+      image: exercise1_13
+      container_name: exercise2-3-backend
+      ports:
+        - 8080:8080
+      environment:
+        - PORT=8080
+        - REQUEST_ORIGIN=http://127.0.0.1:5000
+        - REDIS_HOST=redhost
+        - REDIS_PORT=6379
+        - POSTGRES_HOST=postgres_server
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DATABASE=postgres
+      networks:
+        - database-red-network
+      depends_on:
+        - postgres_server
+        - exercise2-4-redis 
+
+    exercise2-4-frontend:
+      image: exercise1_14_front
+      container_name: exercise2-3-frontend
+      ports:
+        - 5000:5000     
+      environment:
+        - PORT=5000
+        - REACT_APP_BACKEND_URL=http://127.0.0.1:8080 
+      networks:
+        - database-red-network
+
+networks:
+  database-red-network:
+    external:
+      name: database-red-network 

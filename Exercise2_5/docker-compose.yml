@@ -1,0 +1,25 @@
+version: '3.8' 
+
+services:
+    exercise2-5-compute:
+      image: devopsdockeruh/scaling-exercise-compute 
+      container_name: exercise2-5-compute
+      hostname: compute 
+      environment:
+        - VIRTUAL_HOST=compute.localtest.me
+
+    calculator:
+      image: devopsdockeruh/scaling-exercise-calculator
+      ports:
+        - 3000:3000
+      container_name: calculator
+
+    load-balancer:
+      build: ./load-balancer
+      image: load-balancer
+      volumes: 
+        - /var/run/docker.sock:/tmp/docker.sock:ro
+      ports:
+        - 80:80
+      container_name: load-balancer
+
