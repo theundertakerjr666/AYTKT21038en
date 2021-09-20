@@ -1,0 +1,12 @@
+version: '3.8' 
+
+services: 
+    exercise2-2-simplewebservice:  
+      image: devopsdockeruh/simple-web-service
+      ports: 
+        - 8000:8000 
+      volumes:
+              - './mydir/text.log:/usr/src/app/text.log'
+      container_name: exercise2-2-simplewebservice 
+      command: ["exercise2-2-simplewebservice"]
+
