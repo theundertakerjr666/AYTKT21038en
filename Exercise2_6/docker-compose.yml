@@ -14,7 +14,7 @@ services:
        image: postgres:13.2-alpine
        restart: unless-stopped
        environment:
-        -  POSTGRES_PASSWORD: postgres
+        -  POSTGRES_PASSWORD=postgres
        container_name: exercise2-6-postgres_server
        hostname: postgres_server 
        networks:
@@ -37,7 +37,7 @@ services:
       networks:
         - database-red-network
       depends_on:
-        - postgres_server
+        - exercise2-6-postgres_server 
         - exercise2-4-redis 
 
     exercise2-4-frontend:

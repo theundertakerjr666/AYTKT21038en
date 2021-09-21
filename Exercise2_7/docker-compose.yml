@@ -1,0 +1,34 @@
+version: '3.8' 
+
+services:
+    exercise2-7-training-ml:
+      image: training-ml 
+      build: ./ml-kurkkumopo-training 
+      container_name: exercise2-7-training-ml
+      volumes:
+      - ./models:/src/model
+      - ./imgs:/src/imgs
+
+    exercise2-7-training-backend:
+      image: backend-ml
+      build: ./ml-kurkkumopo-backend
+      container_name: exercise2-7-training-backend
+      ports:
+        - 5000:5000
+      volumes:
+        - ./models:/src/model
+      depends_on:
+        - exercise2-7-training-ml
+
+    exercise2-7-training-frontend:
+      image: frontend-ml
+      build: ./ml-kurkkumopo-frontend
+      container_name: exercise2-7-training-frontend
+      ports:
+        - 3000:3000
+      volumes:
+        - ./models:/src/model
+      depends_on:
+        - exercise2-7-training-ml
+
+

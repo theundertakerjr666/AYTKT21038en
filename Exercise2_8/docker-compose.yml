@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  exercise-2-8-redis:
+    image: redis
+    hostname: redis
+    restart: unless-stopped
+    container_name: exercise-2-8-redis
+
+  exercise-2-8-postgres:
+    image: postgres:13.2-alpine
+    hostname: postgres
+    container_name: exercise-2-8-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    
+
+  exercise-2-8-backend:
+    image: backend
+    build: ./example-backend
+    container_name: exercise-2-8-backend
+    ports:
+      - 8080:8080
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
+    depends_on:
+      - exercise-2-8-postgres
+      - exercise-2-8-redis
+
+  exercise-2-8-frontend:
+    image: frontend
+    container_name: exercise-2-8-frontend
+    build: ./example-frontend
+    ports:
+      - 5000:5000
+    
+
+  exercise-2-8-nginx-reverse_proxy:
+    image: nginx:1.19-alpine
+    container_name: exercise-2-8-nginx-reverse_proxy
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    environment:
+      - NGINX_PORT=80
