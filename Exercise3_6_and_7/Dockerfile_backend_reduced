@@ -1,0 +1,38 @@
+FROM golang:alpine3.14 as exercise-2-8-backend 
+
+WORKDIR /mydir
+RUN apk update && apk add wget curl ca-certificates openssl bash
+COPY example-backend .
+ENV PATH=$PATH:/usr/local/go/bin
+RUN chmod 777 /usr/local/go/bin
+RUN ls -ltra /usr/local/go/bin
+EXPOSE 8080
+WORKDIR /mydir
+RUN bash
+RUN echo $PATH
+RUN go version 
+RUN go build 
+ENV PORT=8080
+ENV REQUEST_ORIGIN="http://127.0.0.1"
+#ENV API_URL="http://127.0.0.1:8080"
+
+RUN apk del curl wget
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN adduser -D appuser
+RUN chown appuser .
+USER appuser
+
+FROM scratch
+
+EXPOSE 8080
+
+WORKDIR /mydir
+
+COPY --from=exercise-2-8-backend /mydir/server /mydir
+COPY --from=exercise-2-8-backend /etc/passwd /etc/passwd
+
+USER appuser
+
+ENTRYPOINT [ "./server" ]
+

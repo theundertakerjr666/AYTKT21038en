@@ -1,0 +1,29 @@
+FROM node:current-alpine3.14 as exercise-2-8-frontend 
+
+EXPOSE 5000
+WORKDIR /mydir
+RUN apk update && apk add wget ca-certificates openssl
+RUN apk add curl bash
+COPY ./example-frontend .
+RUN curl -sL https://deb.nodesource.com/setup_14.x 
+RUN apk add  nodejs 
+WORKDIR /mydir
+RUN node -v && npm -v
+ENV REACT_APP_BACKEND_URL=http://127.0.0.1:8080
+RUN npm install
+RUN npm run build
+RUN npm install -g serve 
+
+RUN apk del curl
+RUN rm -rf /var/lib/apk/lists/*
+
+RUN adduser -D appuser
+RUN chown appuser .
+USER appuser
+
+CMD serve -s -l 5000 build
+
+# docker network create internal-container-network
+# docker build -f Dockerfile_frontend -t exercise-2-8-frontend ./
+# docker run -d --net=internal-container-network --name exercise-2-8-frontend -p 5000:5000 exercise-2-8-frontend 
+
